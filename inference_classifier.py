@@ -1,5 +1,5 @@
 import pickle
-
+import requests
 import cv2
 import mediapipe as mp
 import numpy as np
@@ -71,6 +71,24 @@ while True:
         prediction = model.predict([np.asarray(data_aux)])
 
         predicted_character = labels_dict[int(prediction[0])]
+
+        predicted_key = list(labels_dict.keys())[list(labels_dict.values()).index(predicted_character)]
+        print(predicted_key)
+
+        """
+        API_KEY = 'V3MQN6C6R3HV3XDS'
+
+        FIELD_NUM = 1
+
+        DATA = predicted_key
+
+        r = requests.post(f'https://api.thingspeak.com/update?api_key={API_KEY}&field{FIELD_NUM}={DATA}')
+
+        if r.status_code == 200:
+            print('Data sent successfully')
+        else:
+            print(f'Error sending data: {r.status_code}')
+        """
 
         cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 0, 0), 4)
         cv2.putText(frame, predicted_character, (x1, y1 - 10), cv2.FONT_HERSHEY_TRIPLEX, 1, (0, 0, 0), 2,
